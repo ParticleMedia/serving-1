@@ -153,8 +153,10 @@ class RestApiRequestDispatcher {
 
     std::vector<std::pair<string, string>> headers;
     string output;
-    VLOG(1) << "Processing HTTP request: " << req->http_method() << " "
+
+    LOG(INFO) << "Processing HTTP request: " << req->http_method() << " "
             << req->uri_path() << " body: " << body.size() << " bytes.";
+
     const auto status = handler_->ProcessRequest(
         req->http_method(), req->uri_path(), body, &headers, &output);
     const auto http_status = ToHTTPStatusCode(status);
@@ -169,6 +171,8 @@ class RestApiRequestDispatcher {
               << " " << req->uri_path() << " Error: " << status.ToString();
     }
     req->ReplyWithStatus(http_status);
+
+    LOG(INFO) << "Finished processing HTTP request";
   }
 
   const RE2 regex_;
