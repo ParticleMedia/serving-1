@@ -461,7 +461,7 @@ Status ServerCore::ReloadConfig(const ModelServerConfig& new_config) {
 
   TF_RETURN_IF_ERROR(UpdateModelVersionLabelMap());
 
-  LOG(INFO) << "Adding/updating models.";
+  LOG(INFO) << "Adding/updating models (jiaxin-debug).";
   switch (config_.config_case()) {
     case ModelServerConfig::kModelConfigList: {
       if (options_.model_config_list_root_dir) {

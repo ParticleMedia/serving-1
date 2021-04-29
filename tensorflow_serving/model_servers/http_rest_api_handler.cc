@@ -42,6 +42,7 @@ limitations under the License.
 #include "tensorflow_serving/servables/tensorflow/predict_impl.h"
 #include "tensorflow_serving/servables/tensorflow/regression_service.h"
 #include "tensorflow_serving/util/json_tensor.h"
+#include "tensorflow/core/platform/logging.h"
 
 namespace tensorflow {
 namespace serving {
@@ -156,6 +157,8 @@ Status HttpRestApiHandler::ProcessPredictRequest(
     const absl::string_view request_body, string* output) {
   ::google::protobuf::Arena arena;
 
+    LOG(INFO) << "Start handling predict request";
+
   auto* request = ::google::protobuf::Arena::CreateMessage<PredictRequest>(&arena);
   TF_RETURN_IF_ERROR(FillModelSpecWithNameVersionAndLabel(
       model_name, model_version, model_version_label,
@@ -174,6 +177,9 @@ Status HttpRestApiHandler::ProcessPredictRequest(
   TF_RETURN_IF_ERROR(
       predictor_->Predict(run_options_, core_, *request, response));
   TF_RETURN_IF_ERROR(MakeJsonFromTensors(response->outputs(), format, output));
+
+    LOG(INFO) << "Finished handling predict request";
+
   return Status::OK();
 }
 
